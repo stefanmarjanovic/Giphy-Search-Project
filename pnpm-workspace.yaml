@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+  - shared/*
+  - commands/*
+
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - aws-sdk
+  - es5-ext
+  - esbuild
+  - serverless
