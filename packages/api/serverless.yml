@@ -111,3 +111,4 @@ resources:
 
 functions:
   - ${file(./src/baseblocks/admin/admin-functions.yml)}
+  - ${file(./src/baseblocks/giphy/giphy-functions.yml)}
