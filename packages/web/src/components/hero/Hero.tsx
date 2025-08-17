@@ -5,24 +5,29 @@ import axios from 'axios';
 
 const Hero = (): JSX.Element => {
   // declare variables 
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<any[]>([]);
 
   // make request to the API layer
   const Search = async() => {
   try{
+    setLoading(true);
     const response = await axios.get(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
     setResults(response.data || []);
     console.log("search completed"); 
   } catch (error) {
     console.error('Search failed:', error);
     alert('Oops... something went wrong');
+  } finally {
+    setLoading(false);
   }
   };
 
   return(
+    /* Logo and Search Input field */
     <div className={styles.hero}>
-      <div style={{  flexDirection: 'column'}}>
+      <div style={{  width: "30%",margin:"0 auto" }}>
         <img src="/nav-logo.png" className={styles.smallImg}/>
         <input
           className={styles.searchInput}
@@ -31,19 +36,33 @@ const Hero = (): JSX.Element => {
           placeholder="Type your search here ..."
           style={{ margin: '12px', width: '320px', textAlign: 'center' }}
         />
-        <a onClick={Search} style={{
+        <button onClick={Search} disabled={loading}  
+        style={{
               display: 'inline-block',
               padding: '10px 24px',
               background: '#007bff',
               color: '#fff',
               borderRadius: '6px',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               textDecoration: 'none',
               fontWeight: 'bold',
               marginBottom: '8px',
+              minWidth: '120px',
             }}>
-            Giphy Search
-        </a>
+            {loading ? (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="24" height="24" viewBox="0 0 50 50" style={{ marginRight: '8px' }}>
+                  <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" strokeWidth="5" opacity="0.2" />
+                  <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" strokeWidth="5" strokeDasharray="90" strokeDashoffset="60">
+                    <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+                  </circle>
+                </svg>
+                Loading...
+              </span>
+            ) : (
+              'Search'
+            )}
+        </button>
       </div>
       <div style={{ display: 'flex', justifyContent: 'right' }}>
         {Array.isArray(results) && results.length > 0 && (
