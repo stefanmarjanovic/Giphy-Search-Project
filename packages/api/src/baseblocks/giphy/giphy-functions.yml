@@ -1,0 +1,7 @@
+GiphySearch:
+  handler: src/baseblocks/giphy/giphy-api-handler.handler
+  events:
+    - http:
+        path: /api/search-giphy
+        method: get
+        cors: true

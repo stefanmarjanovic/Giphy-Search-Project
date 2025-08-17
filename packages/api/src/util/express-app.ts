@@ -2,7 +2,7 @@ import compression from 'compression';
 import cors from 'cors';
 import express, { Application } from 'express';
 import { logRoute } from '../middleware/log-route';
-import giphyRoute from '../baseblocks/giphy-api';
+import giphyRoute from '../baseblocks/giphy/giphy-api';
 
 const createApp = (): Application => {
   const corsOptions = {
