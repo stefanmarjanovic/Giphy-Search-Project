@@ -22,7 +22,11 @@ export const giphyService = new ServiceObject<Giphy>({
 // query function to search Giphy API
 export const searchGiphy = async (query: string, limit = 10): Promise<Giphy[]> => {
   console.log('Searching Giphy API with query:', query);
-  const response = await axios.get((process.env.GIPHY_BASE_URL + '/api/search'), {
+  // Ensure base URL does not have trailing slash
+  const baseUrl = process.env.GIPHY_BASE_URL?.replace(/\/+$/, '') || 'https://api.giphy.com';
+  const endpoint = baseUrl + '/v1/gifs/search';
+  console.log('Giphy API endpoint:', endpoint);
+  const response = await axios.get(endpoint, {
     params: {
       api_key: process.env.GIPHY_API_KEY,
       q: query,
