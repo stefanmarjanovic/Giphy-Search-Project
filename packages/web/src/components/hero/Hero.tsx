@@ -11,7 +11,7 @@ const Hero = (): JSX.Element => {
   // search handler
   const Search = async() => {
     try{
-        const response = await axios.get('/api/search-giphy', { params: { q: search }});
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}search-giphy`,  { params: { q: search }});
         setResults(response.data.data || []);
     } catch (error) {
         console.error('Search failed:', error);

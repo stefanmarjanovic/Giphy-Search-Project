@@ -35,3 +35,11 @@ ApiAdmin:
             - X-Amz-Security-Token
             - X-Amz-User-Agent
           allowCredentials: false
+          
+GiphySearch:
+  handler: src/baseblocks/giphy-api.handler
+  events:
+    - http:
+        path: /api/search-giphy
+        method: get
+        cors: true

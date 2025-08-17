@@ -3,21 +3,21 @@ import axios from 'axios';
 
 const router = express.Router();
 
-router.get('/search-giphy ', async (req, res) => {
+router.get('/search-giphy', asyncHandler( async (req, res) => {
   const { q } = req.query;
   const apiKey = process.env.GIPHY_API_KEY; // Stored in .env
-  try {
-    const response = await axios.get('https://api.giphy.com/v1/gifs/search', {
-      params: {
-        api_key: apiKey,
-        q,
-        limit: 10,
-      },
-    });
+  const response = await axios.get('https://api.giphy.com/v1/gifs/search', {
+    params: {   api_key: apiKey, q, limit: 10 },
+  });
     res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Search failed' });
-  }
-});
+    console.log('Giphy Response hit') 
+}));
+
+function asyncHandler(fn: express.RequestHandler) {
+  return function (req, res, next) {
+    Promise.resolve(fn(req, res, next)).catch(next);
+    console.log('Giphy route hit')
+  };
+}
 
 export default router;
