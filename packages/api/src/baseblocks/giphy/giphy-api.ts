@@ -1,13 +1,13 @@
 import express from 'express';
-import axios from 'axios';
 import { searchGiphy } from './giphy.service';
 
 const router = express.Router();
 
+// Express route to handle Giphy search requests
 router.get('/search-giphy', asyncHandler( async (req, res) => {
   const { q } = req.query;
   console.log('Trying Giphy API request');   
-  try {const results = await searchGiphy(String(q), 10);
+  try {const results = await searchGiphy(String(q), 12);
     res.json(results);
   } catch (error) {
       console.error('Giphy API error:', error);
@@ -17,6 +17,7 @@ router.get('/search-giphy', asyncHandler( async (req, res) => {
   console.log('Completed Giphy API request'); 
 }));
 
+// Express Helper to handle async errors in route handler
 function asyncHandler(fn: express.RequestHandler) {
   return function (req, res, next) {
     Promise.resolve(fn(req, res, next)).catch(next);
