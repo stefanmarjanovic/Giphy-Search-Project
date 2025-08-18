@@ -8,6 +8,8 @@ const Hero = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<any[]>([]);
+  const [selectedGif, setSelectedGif] = useState<any | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   // make request to the API layer
   const Search = async() => {
@@ -26,6 +28,28 @@ const Hero = (): JSX.Element => {
 
   return (
     <>
+      {/* Modal for full-size image */}
+      {showModal && selectedGif && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0,0,0,0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999
+        }} onClick={() => setShowModal(false)}>
+          <div style={{ position: 'relative', background: '#fff', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowModal(false)} style={{ position: 'absolute', top: 12, right: 12, background: 'transparent', border: 'none', fontSize: '2rem', cursor: 'pointer', color: '#333' }}>&times;</button>
+            <img src={selectedGif.images.original.url} alt={selectedGif.title} style={{ maxWidth: '90vw', maxHeight: '80vh', display: 'block', margin: '0 auto' }} />
+            <div style={{ fontWeight: 'bold', marginTop: '16px', textAlign: 'center' }}>{selectedGif.title}</div>
+            <a href={selectedGif.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline', display: 'block', textAlign: 'center', marginTop: '8px' }}>View on Giphy</a>
+          </div>
+        </div>
+      )}
       {/* render div at top center if results are returned */}
       {Array.isArray(results) && results.length > 0 ? (
         <div className="search-nav" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 'auto', display: 'flex', flexDirection: 'row', alignItems: 'center', background: 'rgba(255,255,255,0.95)', padding: '16px 0', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', justifyContent: 'center'}}>
@@ -113,17 +137,23 @@ const Hero = (): JSX.Element => {
         {Array.isArray(results) && results.length > 0 && (
           <table style={{ width: '100%', maxWidth: '1200px', borderCollapse: 'collapse', margin: '0 auto', marginTop: '100px' }}>
             <tbody>
-              {Array.from({ length: Math.ceil(results.length / 3) }).map((_, rowIdx) => (
+              {Array.from({ length: Math.ceil(results.length / 4) }).map((_, rowIdx) => (
                 <tr key={rowIdx}>
-                  {results.slice(rowIdx * 3, rowIdx * 3 + 3).map(gif => (
-                    <td key={gif.id} style={{ border: '0px solid #ccc', padding: '16px', textAlign: 'center', verticalAlign: 'top', width: '33%' }}>
-                      <img src={gif.images.original.url} alt={gif.title} style={{ maxWidth: '300px', maxHeight: '300px', display: 'block', margin: '0 auto 8px' }} />
+                  {results.slice(rowIdx * 4, rowIdx * 4 + 4).map(gif => (
+                    <td key={gif.id} style={{ border: '0px solid #ccc', padding: '16px', textAlign: 'center', verticalAlign: 'top', width: '25%' }}>
+                      {/* Display Image Modal */}
+                      <img
+                        src={gif.images.original.url}
+                        alt={gif.title}
+                        style={{ maxWidth: '300px', maxHeight: '300px', display: 'block', margin: '0 auto 8px', cursor: 'pointer' }}
+                        onClick={() => { setSelectedGif(gif); setShowModal(true); }}
+                      />
                       <div style={{ fontWeight: 'bold', marginBottom: '6px' }}>{gif.title}</div>
                       <a href={gif.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>View on Giphy</a>
                     </td>
                   ))}
-                  {Array.from({ length: 3 - results.slice(rowIdx * 3, rowIdx * 3 + 3).length }).map((_, i) => (
-                    <td key={`empty-${rowIdx}-${i}`} style={{ width: '33%' }}></td>
+                  {Array.from({ length: 4 - results.slice(rowIdx * 4, rowIdx * 4 + 4).length }).map((_, i) => (
+                    <td key={`empty-${rowIdx}-${i}`} style={{ width: '25%' }}></td>
                   ))}
                 </tr>
               ))}
