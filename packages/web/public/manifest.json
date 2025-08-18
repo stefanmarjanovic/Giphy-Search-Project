@@ -1,10 +1,10 @@
 {
-  "short_name": "Baseline Core",
-  "name": "Baseline Core",
+  "short_name": "Giphy Search Engine",
+  "name": "Giphy Search Engine",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "120x120 64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {

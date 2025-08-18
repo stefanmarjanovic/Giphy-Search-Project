@@ -31,7 +31,7 @@ const Navbar = (): JSX.Element => {
       <div className={styles.navbar}>
         <div className={styles.toggler}>
           <Link to="/" className={styles.logo}>
-            <img src="/nav-logo.png" alt="Baseline Core" />
+            <img src="/nav-logo.png" alt="Giphy Search Engine" />
           </Link>
           <div
             className={styles.hamburger}
