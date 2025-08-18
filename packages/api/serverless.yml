@@ -77,7 +77,7 @@ provider:
     NODE_ENV: ${opt:stage}
     API_REGION: ${opt:region}
     API_CORS_ORIGIN: ${self:custom.apiCorsOrigin}
-    GIPHY_API_KEY: ${ssm:/aws/reference/secretsmanager/giphy-api-key-staging~true}
+    GIPHY_API_KEY: ${ssm:/aws/reference/secretsmanager/giphy-api-key-staging:GIPHY_API_KEY~true}
     GIPHY_BASE_URL: https://api.giphy.com
     COGNITO_USER_POOL_ID:
       # 'ap-southeast-2_zADQdNgNo' # If manually specifying, format expected "ap-southeast-2_zADQdNgNo"
