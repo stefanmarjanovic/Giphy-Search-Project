@@ -11,7 +11,7 @@ const AboutBanner = (): JSX.Element => (
           <br />
           <br />
         Easily discover, explore, and share trending GIFs with a fast and intuitive interface. Powered by robust API integration, Giph Search delivers real-time results and a smooth user experience. 
-        Whether you're looking for the perfect reaction or just browsing for fun, Giph Search makes finding GIFs simple and enjoyable.
+        Whether you&apos;re looking for the perfect reaction or just browsing for fun, Giph Search makes finding GIFs simple and enjoyable.
       </p>
       <Link to="/#">Contact Us</Link>
     </div>
