@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styles from './Hero.module.scss';
 import axios from 'axios';
+import { Giphy } from '@baseline/types/giphy';
 
 const Hero = (): JSX.Element => {
-  // declare variables 
+  // Declare variables 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [results, setResults] = useState<any[]>([]);
-  const [selectedGif, setSelectedGif] = useState<any | null>(null);
+  const [results, setResults] = useState<Giphy[]>([]);
+  const [selectedGif, setSelectedGif] = useState<Giphy>(null); 
   const [showModal, setShowModal] = useState(false);
 
-  // make request to the API layer
+  // Make request to the API layer
   const Search = async() => {
-  try{
-    setLoading(true);
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
-    setResults(response.data || []);
-    console.log("search completed"); 
-  } catch (error) {
-    console.error('Search failed:', error);
-    alert('Oops... something went wrong');
-  } finally {
-    setLoading(false);
-  }
+    try{
+      setLoading(true);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
+    setResults(Array.isArray(response.data) ? response.data : []);
+      console.log("search completed"); 
+    } catch (error) {
+      console.error('Search failed:', error);
+      alert('Oops... something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,7 +61,9 @@ const Hero = (): JSX.Element => {
             placeholder="Type your search here ..."
             style={{ margin: '12px', width: '320px', textAlign: 'center' }}
           />
-          <button onClick={Search} disabled={loading}
+          {/* prefix search() with void to ignore the promise and indicate on further action is required after the search is completed
+              all errors are handled outsite the scope */ }
+          <button onClick={() => { void Search(); }} disabled={loading} 
               style={{
                 display: 'inline-block',
                 padding: '10px 24px',
@@ -101,7 +103,9 @@ const Hero = (): JSX.Element => {
               placeholder="Type your search here ..."
               style={{ margin: '12px', width: '320px', textAlign: 'center' }}
             />
-            <button onClick={Search} disabled={loading}
+            {/* prefix search() with void to ignore the promise and indicate on further action is required after the search is completed
+              all errors are handled outsite the scope */ }
+            <button onClick={() => { void Search(); }} disabled={loading}
               style={{
                 display: 'inline-block',
                 padding: '10px 24px',
