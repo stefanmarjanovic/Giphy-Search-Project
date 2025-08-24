@@ -12,9 +12,10 @@ router.get('/search-giphy', asyncHandler(async (req, res) => {
   try {
   const results: Array<Giphy> = await searchGiphy(queryString, 12);
   res.json(results);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Giphy API error:', error);
-    res.status(500).json({ error: 'Failed to fetch data from Giphy API', details: error?.message || error });
+    let details = String(error);
+    res.status(500).json({ error: 'Failed to fetch data from Giphy API', details });
   }
   console.log('Completed Giphy API request');
 }));
