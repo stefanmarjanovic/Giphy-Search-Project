@@ -18,9 +18,9 @@ router.get('/search-giphy', asyncHandler( async (req, res) => {
 }));
 
 // Express Helper to handle async errors in route handler
-function asyncHandler(fn: express.RequestHandler) {
-  return function (req, res, next) {
-    Promise.resolve(fn(req, res, next)).catch(next);
+function asyncHandler(fn: (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<any>) {
+  return function (req: express.Request, res: express.Response, next: express.NextFunction) {
+    fn(req, res, next).catch(next);
   };
 }
 
