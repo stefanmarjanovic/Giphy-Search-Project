@@ -10,7 +10,7 @@ router.get('/search-giphy', asyncHandler(async (req, res) => {
   const queryString = typeof q === 'string' ? q : '';
   console.log('Trying Giphy API request');
   try {
-  const results: Array<Giphy> = await searchGiphy(queryString, 12);
+  const results: Array<Giphy> = await searchGiphy(queryString);
   res.json(results);
   } catch (error: unknown) {
     console.error('Giphy API error:', error);

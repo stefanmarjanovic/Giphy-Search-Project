@@ -1,10 +1,11 @@
-export interface PagedResponse<T> {
+export interface Page<T> {
   data?: T[];
   pagination: {
     limit: number;
-    totalRecords: number;
+    totalPages: number;
     nextFrom?: number;
     pages: number;
     currentPage: number;
   };
+  onPageChange: (page:number) => void;
 }
