@@ -1,5 +1,6 @@
 import express from 'express';
 import { searchGiphy } from './giphy.service';
+import { Giphy } from '@baseline/types/giphy';
 
 const router = express.Router();
 
@@ -9,8 +10,8 @@ router.get('/search-giphy', asyncHandler(async (req, res) => {
   const queryString = typeof q === 'string' ? q : '';
   console.log('Trying Giphy API request');
   try {
-    const results = await searchGiphy(queryString, 12);
-    res.json(results);
+  const results: Array<Giphy> = await searchGiphy(queryString, 12);
+  res.json(results);
   } catch (error) {
     console.error('Giphy API error:', error);
     res.status(500).json({ error: 'Failed to fetch data from Giphy API', details: error?.message || error });
