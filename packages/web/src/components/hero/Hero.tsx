@@ -47,9 +47,10 @@ const Hero = (): JSX.Element => {
   const Search = async() => {
    try{
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
+        const response = await axios.get<Giphy[]>(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
         setResults(Array.isArray(response.data) ? response.data : []);
         console.log("search completed"); 
+
         // set total page number 
         const pages: number = Math.ceil(response.data.length / itemsPerPage); 
         setTotalPages(pages); 
