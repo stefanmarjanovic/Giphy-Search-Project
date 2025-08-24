@@ -37,12 +37,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Set Role ARN
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "ROLE_ARN=arn:aws:iam::782859940931:role/GitHub-Deploy" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/prod" ]]; then
-            echo "ROLE_ARN=arn:aws:iam::782859940931:role/GitHub-Deploy" >> $GITHUB_ENV
-          fi
+        run: echo "ROLE_ARN=arn:aws:iam::782859940931:role/GitHub-Deploy" >> $GITHUB_ENV
       - name: AWS Assume Role
         id: aws-assume
         uses: aws-actions/configure-aws-credentials@v4
