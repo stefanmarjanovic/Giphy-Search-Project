@@ -21,10 +21,6 @@ router.get('/search-giphy', asyncHandler( async (req, res) => {
 function asyncHandler(fn: express.RequestHandler) {
   return function (req, res, next) {
     Promise.resolve(fn(req, res, next)).catch(next);
-  console.log('Giphy route handler hit')
-  const baseUrl = process.env.GIPHY_BASE_URL?.replace(/\/+$/, '');
-  const endpoint = baseUrl + '/v1/gifs/search';
-  console.log('Giphy API endpoint:', endpoint);
   };
 }
 
