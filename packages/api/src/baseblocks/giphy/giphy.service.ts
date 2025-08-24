@@ -33,13 +33,25 @@ export const searchGiphy = async (query: string, limit = 12): Promise<Giphy[]> =
 
   // Map results to Giphy type to present back to the front-end
   console.log('Giphy API response:', response.data);
-  return response.data.data.map((item: Giphy) => ({
-    id: item.id,
-    url: item.url,
-    title: item.title,
-    images: {
-      original: { url: item.images.original.url },
-      preview: { url: item.images.preview.url },
-    },
-  }));
+  return response.data.data.map((item: unknown) => {
+    const Giphhy = item as {
+      id: string;
+      url: string;
+      title: string;
+      images: {
+        original: { url: string };
+        preview: { url: string };
+      };
+    };
+
+    return {
+      id: Giphhy.id,
+      url: Giphhy.url,
+      title: Giphhy.title,
+      images: {
+        original: { url: Giphhy.images.original.url },
+        preview: { url: Giphhy.images.preview.url },
+      },
+    } as Giphy
+  });
 };
