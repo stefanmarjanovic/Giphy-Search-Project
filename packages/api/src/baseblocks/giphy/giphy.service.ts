@@ -17,7 +17,7 @@ export const giphyService = new ServiceObject<Giphy>({
 });
 
 // HTTPS GET: query Giphy API
-export const searchGiphy = async (query: string, limit = 12): Promise<Giphy[]> => {
+export const searchGiphy = async (query: string): Promise<Giphy[]> => {
   console.log('Searching Giphy API with query:', query);
   // ensure base URL does not have trailing slash
   const baseUrl = process.env.GIPHY_BASE_URL?.replace(/\/+$/, '');
@@ -26,8 +26,7 @@ export const searchGiphy = async (query: string, limit = 12): Promise<Giphy[]> =
   const response = await axios.get<{ data: unknown }>(endpoint, { // casting data 'unknown' to prevent unsafe assumptions
     params: {
       api_key: process.env.GIPHY_API_KEY,
-      q: query,
-      limit,
+      q: query
     },
   });
 

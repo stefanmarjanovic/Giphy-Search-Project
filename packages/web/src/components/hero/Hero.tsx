@@ -3,6 +3,34 @@ import styles from './Hero.module.scss';
 import axios from 'axios';
 import { Giphy } from '@baseline/types/giphy';
 
+// Pagination UI props interface
+interface Page {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+// Add pagination as a React function component
+const Pagination: React.FC<Page> = ({ currentPage, totalPages, onPageChange }) => {
+  const handleClick = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      onPageChange(page);
+    }
+  };
+
+  return(
+      <div>
+          <button onClick={() => handleClick(currentPage - 1)} disabled={currentPage === 1}> Previous </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button key={index + 1} onClick={() => handleClick(index + 1)} disabled={currentPage === index + 1}> 
+              {index + 1}
+            </button>
+          ))}
+          <button onClick={() => handleClick(currentPage + 1)} disabled={currentPage === totalPages}> Next </button>
+      </div>
+  );
+};
+
 const Hero = (): JSX.Element => {
   // Declare variables 
   const [loading, setLoading] = useState(false);
@@ -10,20 +38,33 @@ const Hero = (): JSX.Element => {
   const [results, setResults] = useState<Giphy[]>([]);
   const [selectedGif, setSelectedGif] = useState<Giphy>(null); 
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setPageNumber] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const itemsPerPage = 12;
+  const resultsPerPage = results.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   // Make request to the API layer
   const Search = async() => {
-    try{
-      setLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
-    setResults(Array.isArray(response.data) ? response.data : []);
-      console.log("search completed"); 
-    } catch (error) {
-      console.error('Search failed:', error);
-      alert('Oops... something went wrong');
-    } finally {
-      setLoading(false);
-    }
+   try{
+        setLoading(true);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}api/search-giphy`,  { params: { q: search }});
+        setResults(Array.isArray(response.data) ? response.data : []);
+        console.log("search completed"); 
+        // set total page number 
+        const pages: number = Math.ceil(response.data.length / itemsPerPage); 
+        setTotalPages(pages); 
+        console.log("Total pages: " + pages); 
+      } catch (error) {
+        console.error('Search failed:', error);
+        alert('Oops... something went wrong');
+      } finally {
+        setLoading(false);
+      }
+  };
+
+  { /* Change Page */ }
+  const changePage = ( page: number ) => {
+    setPageNumber(page);
   };
 
   return (
@@ -50,6 +91,7 @@ const Hero = (): JSX.Element => {
           </div>
         </div>
       )}
+
       {/* render div at top center if results are returned */}
       {Array.isArray(results) && results.length > 0 ? (
         <div className="search-nav" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 'auto', display: 'flex', flexDirection: 'row', alignItems: 'center', background: 'rgba(255,255,255,0.95)', padding: '16px 0', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', justifyContent: 'center'}}>
@@ -141,11 +183,11 @@ const Hero = (): JSX.Element => {
         {Array.isArray(results) && results.length > 0 && (
           <table style={{ width: '100%', maxWidth: '1200px', borderCollapse: 'collapse', margin: '0 auto', marginTop: '100px' }}>
             <tbody>
-              {Array.from({ length: Math.ceil(results.length / 4) }).map((_, rowIdx) => (
+              {Array.from({ length: Math.ceil(resultsPerPage.length / 4) }).map((_, rowIdx) => (  
                 <tr key={rowIdx}>
-                  {results.slice(rowIdx * 4, rowIdx * 4 + 4).map(gif => (
+                  {resultsPerPage.slice(rowIdx * 4, rowIdx * 4 + 4).map(gif => (
                     <td key={gif.id} style={{ border: '0px solid #ccc', padding: '16px', textAlign: 'center', verticalAlign: 'top', width: '25%' }}>
-                      {/* Display Image Modal */}
+                      {/* Click Image to display Modal */}
                       <img
                         src={gif.images.original.url}
                         alt={gif.title}
@@ -156,12 +198,24 @@ const Hero = (): JSX.Element => {
                       <a href={gif.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>View on Giphy</a>
                     </td>
                   ))}
-                  {Array.from({ length: 4 - results.slice(rowIdx * 4, rowIdx * 4 + 4).length }).map((_, i) => (
+                  {Array.from({ length: 4 - resultsPerPage.slice(rowIdx * 4, rowIdx * 4 + 4).length }).map((_, i) => (
                     <td key={`empty-${rowIdx}-${i}`} style={{ width: '25%' }}></td>
                   ))}
                 </tr>
               ))}
             </tbody>
+      {/* Pagination Row */}
+            <tfoot>
+              <tr>
+                <td colSpan={itemsPerPage} style={{ textAlign: 'center', padding: '24px 0' }}>
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={changePage}
+                  />
+                </td>
+              </tr>
+            </tfoot>
           </table>
         )}
       </div>
