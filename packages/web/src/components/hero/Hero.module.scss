@@ -18,7 +18,7 @@ $collapseAt: global.$xl;
     flex: 1 1 auto;
     max-width: 550px;
 
-    @media screen and (max-width: $collapseAt) {
+    border: 0;
       max-width: unset;
     }
 
@@ -87,14 +87,14 @@ $collapseAt: global.$xl;
   .searchInput:focus {
     border-color: #888;
   }
-}
+
 
   .paginationButtons {
     border: 0;
     background-color: transparent;
   }
 
-  .paginationLayout{
+  .paginationButtonLayout{
     text-align: center;
     padding: 24px 0;
   }
@@ -162,7 +162,7 @@ $collapseAt: global.$xl;
     .logo{
         height: 90px;
         width: auto;
-        max-width: 180px;
+        margin: 0;
       }
       
     .input {
