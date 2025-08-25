@@ -72,56 +72,26 @@ const Hero = (): JSX.Element => {
     <>
       {/* Modal for full-size image */}
       {showModal && selectedGif && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,0.7)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 9999
-        }} onClick={() => setShowModal(false)}>
-          <div style={{ position: 'relative', background: '#fff', padding: '24px', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
-            <button onClick={() => setShowModal(false)} style={{ position: 'absolute', top: 12, right: 12, background: 'transparent', border: 'none', fontSize: '2rem', cursor: 'pointer', color: '#333' }}>&times;</button>
+        <div className={styles.modal} onClick={() => setShowModal(false)}>
+          <div className={styles.frame} onClick={e => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={() => setShowModal(false)}>&times;</button>
             <img src={selectedGif.images.original.url} alt={selectedGif.title} style={{ maxWidth: '90vw', maxHeight: '80vh', display: 'block', margin: '0 auto' }} />
-            <div style={{ fontWeight: 'bold', marginTop: '16px', textAlign: 'center' }}>{selectedGif.title}</div>
-            <a href={selectedGif.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline', display: 'block', textAlign: 'center', marginTop: '8px' }}>View on Giphy</a>
+            <div className={styles.modalTitle}>{selectedGif.title}</div>
+            <a href={selectedGif.url} target="_blank" rel="noopener noreferrer" className={styles.modalbutton}>View on Giphy</a>
           </div>
         </div>
       )}
 
       {/* render div at top center if results are returned */}
       {Array.isArray(results) && results.length > 0 ? (
-        <div className="search-nav" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 'auto', display: 'flex', flexDirection: 'row', alignItems: 'center', background: 'rgba(255,255,255,0.95)', padding: '16px 0', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', justifyContent: 'center'}}>
-          <img src="/nav-logo.png" style={{ height: '90px', width: 'auto', maxWidth: '180px' }}/>
-          <input
-            className={styles.searchInput}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Type your search here ..."
-            style={{ margin: '12px', width: '320px', textAlign: 'center' }}
-          />
+        <div className={styles.searchNav}>
+          <img  className={styles.logo} src="/nav-logo.png"/>
+          <input className={styles.input} value={search} onChange={e => setSearch(e.target.value)} placeholder="Type your search here ..."/>
           {/* prefix search() with void to ignore the promise and indicate on further action is required after the search is completed
               all errors are handled outsite the scope */ }
-          <button onClick={() => { void Search(); }} disabled={loading} 
-              style={{
-                display: 'inline-block',
-                padding: '10px 24px',
-                background: '#007bff',
-                color: '#fff',
-                borderRadius: '6px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                marginBottom: '8px',
-                minWidth: '120px',
-                flex: "none"
-              }}>
+          <button className={styles.searchButton} onClick={() => { void Search(); }} disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer'}}>
             {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className={styles.loadingWheel}>
                 <svg width="24" height="24" viewBox="0 0 50 50" style={{ marginRight: '8px' }}>
                   <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" strokeWidth="5" opacity="0.2" />
                   <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" strokeWidth="5" strokeDasharray="90" strokeDashoffset="60">
@@ -137,10 +107,9 @@ const Hero = (): JSX.Element => {
         </div>
       ) : ( /* Default layout */
         <div className={styles.hero}>
-          <div className="search-nav" style={{ justifyContent: 'center'}}>
-            <img src="/nav-logo.png" className={styles.smallImg} style={{ height: '100px', width: 'auto', maxWidth: '180px' }}/>
-            <input
-              className={styles.searchInput}
+          <div className="searchNav" style={{ justifyContent: 'center'}}>
+            <img src="/nav-logo.png" className={styles.smallImg} />
+            <input className={styles.searchInput}
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Type your search here ..."
@@ -148,22 +117,9 @@ const Hero = (): JSX.Element => {
             />
             {/* prefix search() with void to ignore the promise and indicate on further action is required after the search is completed
               all errors are handled outsite the scope */ }
-            <button onClick={() => { void Search(); }} disabled={loading}
-              style={{
-                display: 'inline-block',
-                padding: '10px 24px',
-                background: '#007bff',
-                color: '#fff',
-                borderRadius: '6px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                marginBottom: '8px',
-                minWidth: '120px',
-                flex: "none"
-              }}>
+            <button onClick={() => { void Search(); }} disabled={loading} className={styles.defaultSearchButton} style={{cursor: loading ? 'not-allowed' : 'pointer'}}>
               {loading ? (
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span className={styles.defaultLoadingWheel}>
                   <svg width="24" height="24" viewBox="0 0 50 50" style={{ marginRight: '8px' }}>
                     <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" strokeWidth="5" opacity="0.2" />
                     <circle cx="25" cy="25" r="20" fill="none" stroke="#fff" strokeWidth="5" strokeDasharray="90" strokeDashoffset="60">
@@ -180,22 +136,18 @@ const Hero = (): JSX.Element => {
         </div>
       )}
       {/* Results Table */}
-      <div style={{ display: 'flex', justifyContent: 'right' }}>
+      <div className={styles.table}>
         {Array.isArray(results) && results.length > 0 && (
-          <table style={{ width: '100%', maxWidth: '1200px', borderCollapse: 'collapse', margin: '0 auto', marginTop: '100px' }}>
+          <table className={styles.dimensions}>
             <tbody>
               {Array.from({ length: Math.ceil(resultsPerPage.length / 4) }).map((_, rowIdx) => (  
                 <tr key={rowIdx}>
                   {resultsPerPage.slice(rowIdx * 4, rowIdx * 4 + 4).map(gif => (
-                    <td key={gif.id} style={{ border: '0px solid #ccc', padding: '16px', textAlign: 'center', verticalAlign: 'top', width: '25%' }}>
+                    <td className={styles.tableBody} key={gif.id}>
                       {/* Click Image to display Modal */}
-                      <img
-                        src={gif.images.original.url}
-                        alt={gif.title}
-                        style={{ maxWidth: '300px', maxHeight: '300px', display: 'block', margin: '0 auto 8px', cursor: 'pointer' }}
-                        onClick={() => { setSelectedGif(gif); setShowModal(true); }}
-                      />
-                      <div style={{ fontWeight: 'bold', marginBottom: '6px' }}>{gif.title}</div>
+                      <img className={styles.giphy} src={gif.images.original.url} alt={gif.title}
+                        onClick={() => { setSelectedGif(gif); setShowModal(true); }}/>
+                      <div className={styles.title}>{gif.title}</div>
                       <a href={gif.url} target="_blank" rel="noopener noreferrer" style={{ color: '#007bff', textDecoration: 'underline' }}>View on Giphy</a>
                     </td>
                   ))}
@@ -208,7 +160,7 @@ const Hero = (): JSX.Element => {
       {/* Pagination Row */}
             <tfoot>
               <tr>
-                <td colSpan={itemsPerPage} style={{ textAlign: 'center', padding: '24px 0' }}>
+                <td className={styles.paginationButtonLayout} colSpan={itemsPerPage}> 
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
