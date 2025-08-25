@@ -20,13 +20,13 @@ const Pagination: React.FC<Page> = ({ currentPage, totalPages, onPageChange }) =
 
   return(
       <div>
-          <button onClick={() => handleClick(currentPage - 1)} disabled={currentPage === 1}> Previous </button>
+          <button className={styles.paginationButtons} onClick={() => handleClick(currentPage - 1)} disabled={currentPage === 1}> Previous </button>
           {Array.from({ length: totalPages }, (_, index) => (
-            <button key={index + 1} onClick={() => handleClick(index + 1)} disabled={currentPage === index + 1}> 
+            <button className={styles.paginationButtons} key={index + 1} onClick={() => handleClick(index + 1)} disabled={currentPage === index + 1}> 
               {index + 1}
             </button>
           ))}
-          <button onClick={() => handleClick(currentPage + 1)} disabled={currentPage === totalPages}> Next </button>
+          <button className={styles.paginationButtons} onClick={() => handleClick(currentPage + 1)} disabled={currentPage === totalPages}> Next </button>
       </div>
   );
 };

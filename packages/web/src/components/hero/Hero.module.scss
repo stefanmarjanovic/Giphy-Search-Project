@@ -60,8 +60,8 @@ $collapseAt: global.$xl;
   }
 
   .smallImg {
-    height: '48px';
-    width: '180px'; 
+    height: 48px;
+    width: 180px; 
   }
 
   .row {
@@ -85,3 +85,8 @@ $collapseAt: global.$xl;
     border-color: #888;
   }
 }
+
+  .paginationButtons {
+    border: 0;
+    background-color: transparent;
+  }
